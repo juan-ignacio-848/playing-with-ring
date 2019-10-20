@@ -1,12 +1,12 @@
 (ns config.system
-  (:require [integrant.core :as ig]
+  (:require [aero.core :as aero]
             [clojure.java.io :as io]
-            [aero.core :as aero]
+            [customers.routes :as customers]
+            [integrant.core :as ig]
             [org.httpkit.server :as httpkit]
             [reitit.ring :as ring]
-            [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
-            [customers.routes :as customers]))
+            [ring.middleware.params :refer [wrap-params]]))
 
 (defmethod aero/reader 'ig/ref [_ _ value]
   (ig/ref value))
