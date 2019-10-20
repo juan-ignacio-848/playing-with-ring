@@ -14,27 +14,6 @@
 (defn read-config []
   (aero/read-config (io/resource "system.edn")))
 
-;NAMING PLEASE
-(defn dash->underscore [m]
-  (map (fn [map-entry]
-         (-> map-entry
-             key
-             name
-             (clojure.string/replace #"-" "_")
-             keyword))
-       m))
-
-(defn replace-keys-with-dashes [m]
-  (clojure.set/rename-keys m (zipmap (keys m) (dash->underscore m))))
-
-;NAMING PLEASE
-(defn wrap-body-dashes-to-underscore
-  [handler]
-  (fn [request]
-    (let [response (handler request)
-          new-body (replace-keys-with-dashes (:body response))]
-      (assoc response :body new-body))))
-
 (extend-protocol reitit.core/Expand
   clojure.lang.Var
   (expand [this _]
@@ -50,8 +29,6 @@
       (ring/ring-handler (ring/create-default-handler
                            {:not-found (constantly {:status 404 :body "Not found"})}))
       wrap-params
-      ;is there a ring json option to this? feels like re-inventing the wheel
-      wrap-body-dashes-to-underscore
       (wrap-json-response)
       (wrap-json-body {:keywords? true})
       ))
