@@ -30,8 +30,7 @@
                            {:not-found (constantly {:status 404 :body "Not found"})}))
       wrap-params
       (wrap-json-response)
-      (wrap-json-body {:keywords? true})
-      ))
+      (wrap-json-body {:keywords? true})))
 
 (defmethod ig/init-key :http-kit [_ config]
   (assoc config

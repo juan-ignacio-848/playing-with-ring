@@ -1,35 +1,26 @@
 (ns customers.handlers
-  (:import (java.util UUID))
-  (:require [ring.util.response :refer [response]]))
+  (:require [customers.model :as model]
+    [ring.util.response :refer [response created]]))
 
-(def customers (atom {}))
-
-(defn uuid [] (.toString (UUID/randomUUID)))
-
-(defn customer [body]
-  (let [uuid (uuid)
-        customer (merge {:id uuid} body)]
-    (swap! customers merge {uuid customer})
-    customer)
-  )
+(defn customer-id [req]
+  (-> req
+      :path-params
+      :id))
 
 (defn create-customer [req]
-  {:status 201 :body (customer (:body req))})
+  (created "" (model/create-customer (:body req))))
 
 (defn delete-customer [req]
-  (let [id (:id (:path-params req))]
-    (swap! customers dissoc id)))
+  (model/delete-customer (customer-id req)))
 
 (defn find-customer [req]
-  (let [id (:id (:path-params req))]
-    (response (@customers id))))
+  (-> req
+      customer-id
+      model/find-customer
+      response))
 
 (defn find-customers [req]
-  (let [customers (or (vals @customers) [])]
-    (response {:customers customers})))
+  (response {:customers (model/find-customers)}))
 
 (defn update-customer [req]
-  (let [body (dissoc (:body req) :id)
-        id (:id (:path-params req))]
-    (swap! customers assoc id (merge (@customers id) body))
-    (response (@customers id))))
+  (response (model/update-customer (customer-id req) (:body req))))
