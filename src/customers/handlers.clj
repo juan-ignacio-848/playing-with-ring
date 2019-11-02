@@ -8,7 +8,7 @@
       :id))
 
 (defn create-customer [req]
-  (created "" (model/create-customer (:body req))))
+  (created "" (model/create-customer' (:datasource req) (:body req))))
 
 (defn delete-customer [req]
   (model/delete-customer (customer-id req)))
@@ -20,7 +20,7 @@
       response))
 
 (defn find-customers [req]
-  (response {:customers (model/find-customers)}))
+  (response {:customers (model/find-customers (:datasource req))}))
 
 (defn update-customer [req]
   (response (model/update-customer (customer-id req) (:body req))))

@@ -1,4 +1,6 @@
 {:router       {}
- :ring-handler {:router #ig/ref :router}
+ :ring-handler {:router #ig/ref :router
+                :database #ig/ref :jdbc/db}
  :http-kit     {:port 5387
-                :handler #ig/ref :ring-handler}}
+                :handler #ig/ref :ring-handler}
+ :jdbc/h2      {:dbtype "h2" :dbname "example"}}
