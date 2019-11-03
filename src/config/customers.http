@@ -32,7 +32,7 @@ PUT http://localhost:5387/customers/1
 Content-Type: application/json
 
 {
-  "first_name": "MegaPerro",
+  "first_name": "MegaPerro Zarpado",
   "last_name": "Grillete"
 }
 
